@@ -110,7 +110,11 @@
 
     <nav class="sidebar-nav">
         @foreach($nav as $n)
-            @if(isset($n['s']))<div class="sidebar-divider"></div>@endif
+            @if(empty($n['r']))
+                @if(isset($n['s']))<div class="sidebar-divider"></div>@endif
+                @continue
+            @endif
+
             @php $a = $cur === $n['r'] || str_starts_with($cur, explode('.',$n['r'])[0].'.'); @endphp
             <a href="{{ route($n['r']) }}" class="sidebar-link" x-bind:class="sidebarCollapsed ? 'justify-center px-0' : ''" x-cloak>
                 <span class="sidebar-link-icon">{!! $n['i'] !!}</span>
