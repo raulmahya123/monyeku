@@ -1,0 +1,8 @@
+<svg width="260" height="80" viewBox="0 0 260 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="2" width="256" height="76" rx="18" fill="#FFF7ED" stroke="#FDBA74" stroke-width="3"/>
+  <path d="M24 56L40 28L56 56H24Z" fill="#F97316"/>
+  <path d="M44 56L60 34L76 56H44Z" fill="#FB923C"/>
+  <path d="M50 56V24" stroke="#9A3412" stroke-width="3" stroke-linecap="round"/>
+  <text x="88" y="38" fill="#9A3412" font-family="Arial, sans-serif" font-size="14" font-weight="700">BERKEMAH</text>
+  <text x="88" y="58" fill="#C2410C" font-family="Arial, sans-serif" font-size="13" font-weight="600">TEAM</text>
+</svg>
