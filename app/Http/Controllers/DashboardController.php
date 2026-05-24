@@ -114,12 +114,22 @@ class DashboardController extends Controller
         $budgetAlerts = $budgets->filter(fn($b) => $b->percentage >= $b->notification_threshold && $b->percentage <= 100);
         $budgetOverspent = $budgets->filter(fn($b) => $b->percentage > 100);
 
-        $lowStockProducts = Product::where('company_id', $companyId)
-            ->where('is_active', true)
-            ->whereColumn('stock', '<', 'stock_min')
-            ->whereNotNull('stock_min')
-            ->where('stock_min', '>', 0)
-            ->orderByRaw('CAST(stock AS SIGNED) - CAST(stock_min AS SIGNED) ASC')
+        $stockTotals = DB::table('product_warehouse')
+            ->select('product_id', DB::raw('COALESCE(SUM(stock), 0) as stock'))
+            ->groupBy('product_id');
+
+        $lowStockProducts = Product::query()
+            ->leftJoinSub($stockTotals, 'stock_totals', function ($join) {
+                $join->on('products.id', '=', 'stock_totals.product_id');
+            })
+            ->where('products.company_id', $companyId)
+            ->where('products.is_active', true)
+            ->whereNotNull('products.stock_min')
+            ->where('products.stock_min', '>', 0)
+            ->whereRaw('COALESCE(stock_totals.stock, 0) < products.stock_min')
+            ->select('products.*')
+            ->selectRaw('COALESCE(stock_totals.stock, 0) as stock')
+            ->orderByRaw('COALESCE(stock_totals.stock, 0) - products.stock_min ASC')
             ->limit(5)
             ->get();
 
